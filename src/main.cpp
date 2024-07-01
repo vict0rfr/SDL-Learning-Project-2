@@ -3,14 +3,9 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 
-#include "graphics.h"
-
+#include "game.h"
 
 int main(int argc, const char* argv[]){
-    std::cout << "test" << std::endl;
-    Graphics graphics;
-    while(true){
-        
-    }
+    Game game;
     return 0;
 }

@@ -4,6 +4,7 @@
 # Executables
 *.exe
 *.out
+build.sh
 
 # Build directory
 bin/
