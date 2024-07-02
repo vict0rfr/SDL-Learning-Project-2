@@ -62,11 +62,10 @@ public:
      * @param p_y Y position where the sprite should be drawn.
      */
     void draw(Graphics &p_graphics, int p_x, int p_y);
-
-private:
+protected:
     SDL_Rect _src; ///< Source rectangle in the sprite sheet.
     SDL_Texture* _spriteSheet; ///< Texture of the sprite sheet.
-
+private:
     float _x, _y; ///< Current position of the sprite.
 };
 
