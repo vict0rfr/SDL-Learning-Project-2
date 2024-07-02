@@ -18,6 +18,19 @@ namespace globals{
 }
 
 /**
+ * @enum Direction
+ * @brief Enumerates possible movement directions.
+ * 
+ * This enum is used to specify the direction of movement or facing of game entities.
+ */
+enum Direction{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
+/**
  * @struct Vector2f
  * @brief Represents a 2D vector with floating point coordinates.
  * 

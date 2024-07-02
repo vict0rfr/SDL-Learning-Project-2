@@ -9,7 +9,7 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "animatedSprite.h"
+#include "player.h"
 
 class Graphics;
 
@@ -54,7 +54,7 @@ private:
      */
     void update(float p_elapsedTime);
 
-    AnimatedSprite _player; ///< Represents the player character in the game.
+    Player _player; ///< Represents the player character in the game.
 };
 
 #endif // GAME_H

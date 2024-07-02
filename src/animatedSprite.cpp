@@ -60,11 +60,6 @@ void AnimatedSprite::draw(Graphics &p_graphics, int p_x, int p_y){
     }
 }
 
-void AnimatedSprite::setupAnimations(){
-    this->addAnimation(3, 0, 0, "RunLeft", 16, 16, Vector2f(0, 0));
-    this->addAnimation(3, 0, 16, "RunRight", 16, 16, Vector2f(0, 0));
-}
-
 void AnimatedSprite::addAnimation(int p_frames, int p_x, int p_y, std::string p_name, int p_width, int p_height, Vector2f p_offset){
     std::vector<SDL_Rect> rectangles;
     for(int i = 0; i < p_frames; i++){

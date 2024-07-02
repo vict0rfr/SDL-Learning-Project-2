@@ -64,11 +64,6 @@ public:
      */
     void draw(Graphics &p_graphics, int p_x, int p_y);
 
-    /**
-     * @brief Sets up the animations for the sprite. Should be overridden by derived classes.
-     */
-    virtual void setupAnimations();
-
 protected:
     double _timeToUpdate; ///< Time between animation frames.
     bool _currentAnimationOnce; ///< Whether the current animation should only play once.
@@ -106,7 +101,12 @@ protected:
      * @brief Called when an animation is completed.
      * @param p_currentAnimation The animation that just finished.
      */
-    virtual void animationDone(std::string p_currentAnimation);
+    virtual void animationDone(std::string p_currentAnimation) = 0;
+
+    /**
+     * @brief Sets up the animations for the sprite. Should be overridden by derived classes.
+     */
+    virtual void setupAnimations() = 0;
 
 private:
     std::map<std::string, std::vector<SDL_Rect>> _animations; ///< Map of animation names to frame rectangles.
