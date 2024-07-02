@@ -1,9 +1,10 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-/*
-Holds all info for graphics of the game
-*/
+/**
+ * @file graphics.h
+ * @brief Holds all information for graphics management in the game.
+ */
 
 #include <map>
 #include <string>
@@ -11,53 +12,69 @@ Holds all info for graphics of the game
 struct SDL_Window;
 struct SDL_Renderer;
 
+/**
+ * @class Graphics
+ * @brief Manages all graphics for the game.
+ * 
+ * This class is responsible for initializing and handling the main window and renderer.
+ * It also manages loading and drawing textures.
+ */
 class Graphics {
-    public:
-        /*
-        Constructer that will initiliaze the window and the renderer.
-        Also sets the window title to Cavestory
-        */
-        Graphics();
+public:
+    /**
+     * @brief Constructor that initializes the window and the renderer.
+     * 
+     * Sets the window title to "Cavestory".
+     */
+    Graphics();
 
-        /*
-        Will destroy everything and free memory
-        */
-        ~Graphics();
+    /**
+     * @brief Destructor that cleans up resources.
+     * 
+     * Destroys the window and renderer, freeing up memory.
+     */
+    ~Graphics();
 
-        /* SDL_Surface* loadImage
-        Loads an image onto _spriteSheets map if it doesn't already exist.
-        Each image will be only loaded once. Returns the image from the map
-        regardless of whether it was just loaded or not.
-        */
-        SDL_Surface* loadImage(const std::string &p_filePath);
+    /**
+     * @brief Loads an image into the _spriteSheets map if it doesn't already exist.
+     * 
+     * Ensures each image is only loaded once. Returns the image from the map
+     * regardless of whether it was just loaded or not.
+     * 
+     * @param p_filePath The file path of the image to load.
+     * @return SDL_Surface* Pointer to the loaded surface.
+     */
+    SDL_Surface* loadImage(const std::string &p_filePath);
 
-        /* void blitSurface
-        Draws a given texture (p_texture) onto a part of the screen 
-        determined by p_dst. p_src will determine what part of p_texture
-        to be drawn/rendered.
-        */
-        void blitSurface(SDL_Texture* p_texture, SDL_Rect* p_src, SDL_Rect* p_dst);
+    /**
+     * @brief Draws a given texture onto a part of the screen.
+     * 
+     * @param p_texture The texture to draw.
+     * @param p_src The source rectangle within the texture to draw.
+     * @param p_dst The destination rectangle on the screen to draw the texture to.
+     */
+    void blitSurface(SDL_Texture* p_texture, SDL_Rect* p_src, SDL_Rect* p_dst);
 
-        /* void flip
-        Renders everything on the screen
-        */
-        void flip();
+    /**
+     * @brief Renders everything on the screen.
+     */
+    void flip();
 
-        /* void clear
-        Clears the screen
-        */
-        void clear();
+    /**
+     * @brief Clears the screen.
+     */
+    void clear();
 
-        /*SDL_Renderer* getRenderer
-        Returns the instance's renderer
-        */
-        SDL_Renderer* getRenderer() const;
-    private:
-        SDL_Window* _window;
-        SDL_Renderer* _renderer;
+    /**
+     * @brief Returns the renderer instance.
+     * 
+     * @return SDL_Renderer* The current renderer instance.
+     */
+    SDL_Renderer* getRenderer() const;
 
-        std::map<std::string, SDL_Surface*> _spriteSheets;
+private:
+    SDL_Window* _window; ///< The main window.
+    SDL_Renderer* _renderer; ///< The renderer for drawing.
+    std::map<std::string, SDL_Surface*> _spriteSheets; ///< Map of sprite sheets loaded.
 };
-
-
-#endif // GRAPHICS_H
+#endif /* GRAPHICS_H */

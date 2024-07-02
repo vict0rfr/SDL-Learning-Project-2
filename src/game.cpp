@@ -5,34 +5,20 @@
 #include "graphics.h"
 #include "input.h"
 
-/*
-Main game loop
-*/
-
 namespace{
     const int FPS = 50;
     const int MAX_FRAME_TIME = 5 * 1000 / FPS;
 }
 
-/*
-Initializes SDL components and calls the gameLoop()
-*/
 Game::Game(){
     SDL_Init(SDL_INIT_EVERYTHING);
     this->gameLoop();
 }
 
-/*
-Will destroy everything
-*/
 Game::~Game(){
 
 }
 
-/*
-The gameLoop() will take in all inputs made by the player
-and will draw textures to the screen
-*/
 void Game::gameLoop(){
     Graphics graphics;
     Input input;
