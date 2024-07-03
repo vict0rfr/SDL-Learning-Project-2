@@ -25,6 +25,7 @@ void Game::gameLoop(){
     SDL_Event e;
 
     this->_player = Player(graphics, 100, 100);
+    this->_level = Level("map 1", Vector2f(100, 100), graphics);
 
     int LAST_UPDATE_TIME = SDL_GetTicks64();
 
@@ -54,7 +55,7 @@ void Game::gameLoop(){
         if(!input.isKeyHeld(SDL_SCANCODE_LEFT) && !input.isKeyHeld(SDL_SCANCODE_RIGHT)){
             this->_player.stopMoving();
         }
-        
+
         const int CURRENT_TIME_MS = SDL_GetTicks64();
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
         this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
@@ -68,6 +69,7 @@ void Game::gameLoop(){
 void Game::draw(Graphics &p_graphics){
     p_graphics.clear();
 
+    this->_level.draw(p_graphics);
     this->_player.draw(p_graphics);
 
     p_graphics.flip();
@@ -76,4 +78,5 @@ void Game::draw(Graphics &p_graphics){
 
 void Game::update(float p_elapsedTime){
     this->_player.update(p_elapsedTime);
+    this->_level.update(p_elapsedTime);
 }

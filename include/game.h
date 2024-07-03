@@ -10,6 +10,7 @@
 #define GAME_H
 
 #include "player.h"
+#include "level.h"
 
 class Graphics;
 
@@ -55,6 +56,7 @@ private:
     void update(float p_elapsedTime);
 
     Player _player; ///< Represents the player character in the game.
+    Level _level;
 };
 
 #endif // GAME_H
