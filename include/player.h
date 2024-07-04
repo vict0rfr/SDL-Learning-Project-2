@@ -38,7 +38,7 @@ class Player : public AnimatedSprite {
          * @param p_x Initial x-coordinate of the player.
          * @param p_y Initial y-coordinate of the player.
          */
-        Player(Graphics &p_graphics, float p_x, float p_y);
+        Player(Graphics &p_graphics, Vector2f p_spawnPoint);
 
         /**
          * @brief Draws the player on the screen.
@@ -81,10 +81,15 @@ class Player : public AnimatedSprite {
          */
         virtual void setupAnimations();
 
+        void handleTileCollisions(std::vector<Rectangle> &p_others);
+
+        float getX() const;
+        float getY() const;
+
     private:
         float _dx, _dy; ///< Delta x and y for player's movement.
-
         Direction _facing; ///< Current direction the player is facing.
+        bool _grounded; ///< True/False depending on if the player is on the ground or not.
 };
 
 #endif /* PLAYER */

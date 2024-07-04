@@ -17,6 +17,25 @@ namespace globals{
     const int SPRITE_SCALE = 2.0f; ///< Scale factor for sprites.
 }
 
+namespace sides{
+    enum Side{
+        TOP,
+        BOTTOM,
+        LEFT,
+        RIGHT,
+        NONE,
+    };
+
+    const inline Side getOppositeSide(Side p_side){
+        return
+                p_side == TOP ? BOTTOM :
+                p_side == BOTTOM ? TOP :
+                p_side == LEFT ? RIGHT :
+                p_side == RIGHT ? LEFT :
+                NONE;
+    }
+}
+
 /**
  * @enum Direction
  * @brief Enumerates possible movement directions.

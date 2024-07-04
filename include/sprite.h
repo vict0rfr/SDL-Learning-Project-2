@@ -4,6 +4,9 @@
 #include <SDL2/SDL.h>
 #include <string>
 
+#include "rectangle.h"
+#include "globals.h"
+
 class Graphics;
 
 /**
@@ -62,10 +65,33 @@ public:
      * @param p_y Y position where the sprite should be drawn.
      */
     void draw(Graphics &p_graphics, int p_x, int p_y);
+
+    /**
+     * @brief Gets the bounding box of the sprite.
+     * 
+     * This method returns the bounding box of the sprite, which can be used for collision detection
+     * and other purposes where the physical boundaries of the sprite are needed.
+     * 
+     * @return const Rectangle: The bounding box of the sprite.
+     */
+    const Rectangle getBoundingBox() const;
+
+    /**
+     * @brief Determines the side of the collision with another rectangle.
+     * 
+     * This method compares the bounding box of the sprite with another rectangle (typically another sprite's bounding box)
+     * to determine on which side the collision occurred. This can be useful for resolving collisions in a more
+     * specific manner, such as adjusting sprite position or triggering different behaviors based on the collision side.
+     * 
+     * @param p_other The Rectangle to check collision against.
+     * @return const sides::Side: The side of the sprite where the collision with the other rectangle occurred.
+     */
+    const sides::Side getCollisionSide(Rectangle &p_other) const;
 protected:
     SDL_Rect _src; ///< Source rectangle in the sprite sheet.
     SDL_Texture* _spriteSheet; ///< Texture of the sprite sheet.
     float _x, _y; ///< Current position of the sprite.
+    Rectangle _boundingBox;
 private:
 };
 
