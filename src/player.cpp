@@ -5,6 +5,7 @@ namespace player_constants{
     const float WALK_SPEED = 0.2f;
     const float GRAVITY = 0.002f;
     const float GRAVITY_CAP = 0.8f;
+    const float JUMP_SPEED = 0.7f;
 }
 
 Player::Player(){}
@@ -42,6 +43,15 @@ void Player::stopMoving(){
     this->playAnimation(this->_facing == RIGHT ? "IdleRight" : "IdleLeft");
 }
 
+void Player::jump(){
+    if(this->_grounded){
+        this->_dy = 0;
+        this->_dy -= player_constants::JUMP_SPEED;
+        this->_grounded = false;
+    }
+}
+
+
 void Player::update(float p_elapsedTime){
     //Apply gravity
     if(this->_dy <= player_constants::GRAVITY_CAP){
@@ -70,8 +80,12 @@ void Player::handleTileCollisions(std::vector<Rectangle> &p_others){
         sides::Side collisionSide = getCollisionSide(p_others.at(i));
             switch(collisionSide){
                 case sides::TOP:
-                    this->_y = p_others.at(i).getBottom() + 1;
                     this->_dy = 0;
+                    this->_y = p_others.at(i).getBottom() + 1;
+                    if(this->_grounded){
+                        this->_dx = 0;
+                        this->_x -= this->_facing == RIGHT ? 1.0f : -1.0f;
+                    }
                     break;
                 case sides::BOTTOM:
                     this->_y = p_others.at(i).getTop() - this->_boundingBox.getHeight() - 1;
@@ -88,6 +102,20 @@ void Player::handleTileCollisions(std::vector<Rectangle> &p_others){
                 default:
                     break;
             }
+    }
+}
+
+void Player::handleSlopeCollisions(std::vector<Slope> &p_others){
+    for(int i = 0; i < p_others.size(); i++){
+        int b = (p_others.at(i).getP1().y - (p_others.at(i).getSlope() * p_others.at(i).getP1().x));
+
+        int centerX = this->_boundingBox.getCenterX();
+        int newY = (p_others.at(i).getSlope() * centerX) + b - 8;
+
+        if(this->_grounded){
+            this->_y = newY - this->_boundingBox.getHeight();
+            this->_grounded = true;
+        }
     }
 }
 

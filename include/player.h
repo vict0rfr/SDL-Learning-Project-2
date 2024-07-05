@@ -12,6 +12,7 @@
 
 #include "animatedSprite.h"
 #include "globals.h"
+#include "slope.h"
 
 #include <string>
 
@@ -69,6 +70,8 @@ class Player : public AnimatedSprite {
          */
         void stopMoving();
 
+        void jump();
+
         /**
          * @brief Callback for when an animation is completed.
          * 
@@ -82,6 +85,7 @@ class Player : public AnimatedSprite {
         virtual void setupAnimations();
 
         void handleTileCollisions(std::vector<Rectangle> &p_others);
+        void handleSlopeCollisions(std::vector<Slope> &p_others);
 
         float getX() const;
         float getY() const;
