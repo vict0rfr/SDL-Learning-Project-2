@@ -2,11 +2,13 @@
 #include <sstream>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 #include "level.h"
 #include "graphics.h"
 #include "tinyxml2.h"
 #include "utils.h"
+#include "animatedTile.h"
 
 using namespace tinyxml2;
 
@@ -23,20 +25,26 @@ Level::Level(std::string p_mapName, Vector2f p_spawnPoint, Graphics &p_graphics)
 Level::~Level(){}
 
 void Level::update(int p_elapsedTime){
-
+    for(int i = 0; i < this->_animatedTileList.size(); i++){
+        this->_animatedTileList[i].update(p_elapsedTime);
+    }
 }
 
 void Level::draw(Graphics &p_graphics){
     for(int i = 0; i < this->_tileList.size(); i++){
-        this->_tileList.at(i).draw(p_graphics);
+        this->_tileList[i].draw(p_graphics);
+    }
+
+    for(int i = 0; i < this->_animatedTileList.size(); i++){
+        this->_animatedTileList[i].draw(p_graphics);
     }
 }
 
 std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &p_other){
     std::vector<Rectangle> others;
     for(int i = 0; i < this->_collisionRects.size(); i++){
-        if(this->_collisionRects.at(i).collidesWith(p_other)){
-            others.push_back(this->_collisionRects.at(i));
+        if(this->_collisionRects[i].collidesWith(p_other)){
+            others.push_back(this->_collisionRects[i]);
         }
     }
     return others;
@@ -47,7 +55,7 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &p_other){
     std::vector<Slope> others;
     for(int i = 0; i < this->_slopes.size(); i++){
         if(this->_slopes.at(i).collidesWith(p_other)){
-            others.push_back(this->_slopes.at(i));
+            others.push_back(this->_slopes[i]);
         }
     }
     return others;
@@ -55,6 +63,19 @@ std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &p_other){
 
 const Vector2f Level::getPlayerSpawnPoint() const {
     return this->_spawnPoint;
+}
+
+Vector2f Level::getTilesetPosition(Tileset p_tls, int p_gid, int p_tileWidth, int p_tileHeight){
+    int tilesetWidth, tilesetHeight;
+    SDL_QueryTexture(p_tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
+    int tsxx = p_gid % (tilesetWidth / p_tileWidth) - 1;
+    tsxx *= p_tileWidth;
+    int tsyy = 0;
+    int amt = ((p_gid - p_tls.FirstGid) / (tilesetWidth / p_tileWidth));
+    tsyy = p_tileHeight * amt;
+    Vector2f finalTileSetPos = Vector2f(tsxx, tsyy);
+    
+    return finalTileSetPos;
 }
 
 void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
@@ -91,6 +112,33 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
             SDL_Texture* tex = SDL_CreateTextureFromSurface(p_graphics.getRenderer(), p_graphics.loadImage(ss.str()));
             this->_tilesets.push_back(Tileset(tex, firstGid));
             
+            //get all the animations for that tileset before moving on
+            XMLElement * pTileA = pTileset->FirstChildElement("tile");
+            if(pTileA != NULL){
+                while(pTileA){
+                    AnimatedTileInfo ati;
+                    ati.StartTileId = pTileA->IntAttribute("id") + firstGid;
+                    ati.TilesetsFirstGid = firstGid;
+
+                    XMLElement* pAnimation = pTileA->FirstChildElement("animation");
+                    if(pAnimation != NULL){
+                        while(pAnimation){
+                            XMLElement* pFrame = pAnimation->FirstChildElement("frame");
+                            if(pFrame != NULL){
+                                while(pFrame){
+                                    ati.TileIds.push_back(pFrame->IntAttribute("tileid") + firstGid);
+                                    ati.Duration = pFrame->IntAttribute("duration");
+
+                                    pFrame = pFrame->NextSiblingElement("frame");
+                                }
+                            }
+                            this->_animatedTileInfo.push_back(ati);
+                            pAnimation = pAnimation->NextSiblingElement("tile");
+                        }
+                    }
+                    pTileA = pTileA->NextSiblingElement("tile");
+                }
+            }
             pTileset = pTileset->NextSiblingElement("tileset");
         }
     }
@@ -122,9 +170,14 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
 
                             int gid = pTile->IntAttribute("gid");
                             Tileset tls;
+                            int closest = 0;
                             for(int i = 0; i < this->_tilesets.size(); i++){
                                 if(this->_tilesets[i].FirstGid <= gid){
-                                    tls = this->_tilesets.at(i);
+                                    if(this->_tilesets[i].FirstGid > closest){
+                                        closest = this->_tilesets[i].FirstGid;
+                                        tls = this->_tilesets[i];
+                                    }
+                                    tls = this->_tilesets[i];
                                     break;
                                 }
                             }
@@ -149,30 +202,42 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                             Vector2f finalTilePos = Vector2f(xx, yy);
 
                             //calculate the position of the tile in its tileset
-                            int tilesetWidth, tilesetHeight;
-                            SDL_QueryTexture(tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-                            int tsxx = gid % (tilesetWidth / tileWidth) - 1;
-                            tsxx *= tileWidth;
-                            int tsyy = 0;
-                            int amt = (gid / (tilesetWidth / tileWidth));
-                            tsyy = tileHeight * amt;
-                            Vector2f finalTileSetPos = Vector2f(tsxx, tsyy);
+                            Vector2f finalTileSetPos = this->getTilesetPosition(tls, gid, tileWidth, tileHeight);
 
                             //build the tile and add it to the level's tile list
+                            bool isAnimatedTile = false;
+                            AnimatedTileInfo ati;
+
+                            for(int i = 0; i < this->_animatedTileInfo.size(); i++){
+                                if(this->_animatedTileInfo[i].StartTileId == gid){
+                                    ati = this->_animatedTileInfo[i];
+                                    isAnimatedTile = true;
+                                    break;
+                                }
+                            }
+
+                            if(isAnimatedTile){
+                                std::vector<Vector2f> tilesetPositions;
+                                for(int i = 0; i < ati.TileIds.size(); i++){
+                                    tilesetPositions.push_back(this->getTilesetPosition(tls, ati.TileIds[i],
+                                        tileWidth, tileHeight));
+                                    AnimatedTile tile(tilesetPositions, ati.Duration, tls.Texture,
+                                        Vector2f(tileWidth, tileHeight), finalTilePos);
+                                    this->_animatedTileList.push_back(tile);
+                                }
+                            } else {
                             Tile tile(tls.Texture, Vector2f(tileWidth, tileHeight),
                                 finalTileSetPos, finalTilePos);
                             this->_tileList.push_back(tile);
+                            }
                             tileCounter++;
 
                              pTile = pTile->NextSiblingElement("tile");
                         }
                     }
-
-
                     pData = pData->NextSiblingElement("data");
                 }
             }
-            
             pLayer = pLayer->NextSiblingElement("layer");
         }
     }
@@ -199,12 +264,10 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                             std::ceil(width) * globals::SPRITE_SCALE,
                             std::ceil(height) * globals::SPRITE_SCALE
                         ));
-
                         pObject = pObject->NextSiblingElement("object");
                     }
                 } 
-            }
-            else if(ss.str() == "slopes"){
+            } else if(ss.str() == "slopes"){
                 XMLElement* pObject = pObjectGroup->FirstChildElement("object");
                 if(pObject != NULL){
                     while(pObject){
@@ -236,16 +299,11 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                                 Vector2f((p1.x + points.at(i < 2 ? i + 1 : i).x) * globals::SPRITE_SCALE,
                                         (p1.y + points.at(i < 2 ? i + 1 : i).y) * globals::SPRITE_SCALE)
                                 ));
-
                         }
-
                         pObject = pObject->NextSiblingElement("object");
                     }
                 } 
-            }
-
-
-            else if(ss.str() == "spawn points"){
+            } else if(ss.str() == "spawn points"){
                 XMLElement* pObject = pObjectGroup->FirstChildElement("object");
                 if(pObject != NULL){
                     while(pObject){
@@ -257,7 +315,6 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                         if(ss.str() == "player"){
                             this->_spawnPoint = Vector2f(std::ceil(x) * globals::SPRITE_SCALE, std::ceil(y) * globals::SPRITE_SCALE);
                         }
-
                         pObject = pObject->NextSiblingElement("object");
                     }
                 }

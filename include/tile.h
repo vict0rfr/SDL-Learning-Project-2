@@ -54,7 +54,7 @@ class Tile{
          */
         void draw(Graphics &p_graphics);
 
-     private:
+     protected:
         SDL_Texture* _tileset; ///< Pointer to the SDL_Texture object for the tileset.
         Vector2f _size; ///< Size of the tile.
         Vector2f _tilesetPosition; ///< Position of the tile within the tileset.

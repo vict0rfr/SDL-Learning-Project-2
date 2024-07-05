@@ -13,6 +13,7 @@
 #include "tile.h"
 #include "rectangle.h"
 #include "slope.h"
+#include "animatedTile.h"
 
 class Graphics;
 struct SDL_Texture;
@@ -85,6 +86,10 @@ class Level{
         std::vector<Rectangle> _collisionRects;
         std::vector<Slope> _slopes;
 
+        std::vector<AnimatedTile> _animatedTileList;
+        std::vector<AnimatedTileInfo> _animatedTileInfo;
+
+        Vector2f getTilesetPosition(Tileset p_tls, int p_gid, int p_tileWidth, int p_tileHeight);
         /**
          * @brief Loads the map and resources for the level.
          * 
@@ -92,6 +97,7 @@ class Level{
          * @param p_graphics Graphics context used for loading textures.
          */
         void loadMap(std::string p_mapName, Graphics &p_graphics);
+
 };
 
 struct Tileset{
