@@ -140,7 +140,7 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                             //calculate the position of the tile in its tileset
                             int tilesetWidth, tilesetHeight;
                             SDL_QueryTexture(tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-                            int tsxx = (gid - 1) % (tilesetWidth/tileWidth) * tileWidth;
+                            int tsxx = gid % (tilesetWidth / tileWidth) - 1;
                             tsxx *= tileWidth;
                             int tsyy = 0;
                             int amt = (gid / (tilesetWidth / tileWidth));

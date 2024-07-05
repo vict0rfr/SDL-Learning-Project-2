@@ -85,7 +85,8 @@ void Player::handleTileCollisions(std::vector<Rectangle> &p_others){
                     this->_x = p_others.at(i).getLeft() - this->_boundingBox.getWidth() - 1;
                     break;
                 case sides::NONE:
-                    continue;
+                default:
+                    break;
             }
     }
 }
