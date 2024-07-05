@@ -68,7 +68,7 @@ const Vector2f Level::getPlayerSpawnPoint() const {
 Vector2f Level::getTilesetPosition(Tileset p_tls, int p_gid, int p_tileWidth, int p_tileHeight){
     int tilesetWidth, tilesetHeight;
     SDL_QueryTexture(p_tls.Texture, NULL, NULL, &tilesetWidth, &tilesetHeight);
-    int tsxx = p_gid % (tilesetWidth / p_tileWidth) - 1;
+    int tsxx = (p_gid - 1) % (tilesetWidth / p_tileWidth);
     tsxx *= p_tileWidth;
     int tsyy = 0;
     int amt = ((p_gid - p_tls.FirstGid) / (tilesetWidth / p_tileWidth));
