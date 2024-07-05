@@ -177,8 +177,6 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                                         closest = this->_tilesets[i].FirstGid;
                                         tls = this->_tilesets[i];
                                     }
-                                    tls = this->_tilesets[i];
-                                    break;
                                 }
                             }
                             if(tls.FirstGid == -1){
@@ -221,10 +219,10 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                                 for(int i = 0; i < ati.TileIds.size(); i++){
                                     tilesetPositions.push_back(this->getTilesetPosition(tls, ati.TileIds[i],
                                         tileWidth, tileHeight));
-                                    AnimatedTile tile(tilesetPositions, ati.Duration, tls.Texture,
-                                        Vector2f(tileWidth, tileHeight), finalTilePos);
-                                    this->_animatedTileList.push_back(tile);
-                                }
+                                } // moved this out of the for loop
+                                AnimatedTile tile(tilesetPositions, ati.Duration, tls.Texture,
+                                    Vector2f(tileWidth, tileHeight), finalTilePos);
+                                this->_animatedTileList.push_back(tile);
                             } else {
                             Tile tile(tls.Texture, Vector2f(tileWidth, tileHeight),
                                 finalTileSetPos, finalTilePos);
@@ -232,7 +230,7 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                             }
                             tileCounter++;
 
-                             pTile = pTile->NextSiblingElement("tile");
+                            pTile = pTile->NextSiblingElement("tile");
                         }
                     }
                     pData = pData->NextSiblingElement("data");
