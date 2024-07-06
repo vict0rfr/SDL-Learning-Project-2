@@ -5,6 +5,7 @@
 *.exe
 *.out
 build.sh
+build.bat
 
 # Build directory
 bin/
