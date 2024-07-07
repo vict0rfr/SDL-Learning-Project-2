@@ -56,7 +56,7 @@ void Player::moveRight(){
 }
 
 void Player::lookUp(){
-    this->_lookingUp == true;
+    this->_lookingUp = true;
 
     if(this->_dx == 0){
         this->playAnimation(this->_facing == RIGHT ? "IdleRightUp" : "IdleLeftUp");
@@ -66,13 +66,14 @@ void Player::lookUp(){
 }
 
 void Player::stopLookingUp(){
-    this->_lookingUp == false;
+    this->_lookingUp = false;
 }
 
 void Player::lookDown(){
-    this->_lookingDown == true;
+    this->_lookingDown = true;
     if(this->_grounded){
         this->playAnimation(this->_facing == RIGHT ? "LookBackwardsRight" : "LookBackwardsLeft");
+        this->_dx = 0.0f; // without this, it makes it possible to move while looking down, which looks weird
     } else {
         this->playAnimation(this->_facing == RIGHT ? "LookDownRight" : "LookDownLeft");
     }

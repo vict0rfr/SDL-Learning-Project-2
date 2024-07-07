@@ -67,7 +67,7 @@ void Game::gameLoop(){
         if(input.wasKeyReleased(SDL_SCANCODE_DOWN) == true){
             this->_player.stopLookingDown();
         }
-        if(input.wasKeyPressed(SDL_SCANCODE_SPACE) == true){
+        if(input.wasKeyPressed(SDL_SCANCODE_SPACE) || input.isKeyHeld(SDL_SCANCODE_SPACE)){
             this->_player.jump();
         }
 
