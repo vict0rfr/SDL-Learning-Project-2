@@ -4,6 +4,7 @@
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
+#include "hud.h"
 
 namespace{
     const int FPS = 50;
@@ -26,6 +27,7 @@ void Game::gameLoop(){
 
     this->_level = Level("Map 1", Vector2f(100, 100), graphics);
     this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
+    this->_hud = Hud(graphics, this->_player);
 
     int LAST_UPDATE_TIME = SDL_GetTicks64();
 
@@ -35,7 +37,6 @@ void Game::gameLoop(){
         if(SDL_PollEvent(&e)){
             if(e.type == SDL_KEYDOWN){
                 if(e.key.repeat == 0){
-                    std::cout << "key down" << std::endl;
                     input.keyDownEvent(e);
                 }
             } else if(e.type == SDL_KEYUP){
@@ -89,6 +90,7 @@ void Game::draw(Graphics &p_graphics){
 
     this->_level.draw(p_graphics);
     this->_player.draw(p_graphics);
+    this->_hud.draw(p_graphics);
 
     p_graphics.flip();
 }
@@ -96,6 +98,7 @@ void Game::draw(Graphics &p_graphics){
 void Game::update(float p_elapsedTime){
     this->_player.update(p_elapsedTime);
     this->_level.update(p_elapsedTime);
+    this->_hud.update(p_elapsedTime);
 
     std::vector<Rectangle> others;
     if((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0){

@@ -95,6 +95,9 @@ class Player : public AnimatedSprite {
         float getX() const;
         float getY() const;
 
+        inline int getMaxHealth() const { return this->_maxHealth; }
+        inline int getCurrentHealth() const { return this->_currentHealth; }
+
     private:
         float _dx, _dy; ///< Delta x and y for player's movement.
         Direction _facing; ///< Current direction the player is facing.
@@ -102,6 +105,9 @@ class Player : public AnimatedSprite {
 
         bool _lookingUp;
         bool _lookingDown;
+
+        int _maxHealth;
+        int _currentHealth;
 };
 
 #endif /* PLAYER */
