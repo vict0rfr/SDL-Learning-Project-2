@@ -70,6 +70,11 @@ class Player : public AnimatedSprite {
          */
         void stopMoving();
 
+        void lookUp();
+        void stopLookingUp();
+        void lookDown();
+        void stopLookingDown();
+
         void jump();
 
         /**
@@ -94,6 +99,9 @@ class Player : public AnimatedSprite {
         float _dx, _dy; ///< Delta x and y for player's movement.
         Direction _facing; ///< Current direction the player is facing.
         bool _grounded; ///< True/False depending on if the player is on the ground or not.
+
+        bool _lookingUp;
+        bool _lookingDown;
 };
 
 #endif /* PLAYER */

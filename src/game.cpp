@@ -35,6 +35,7 @@ void Game::gameLoop(){
         if(SDL_PollEvent(&e)){
             if(e.type == SDL_KEYDOWN){
                 if(e.key.repeat == 0){
+                    std::cout << "key down" << std::endl;
                     input.keyDownEvent(e);
                 }
             } else if(e.type == SDL_KEYUP){
@@ -52,7 +53,21 @@ void Game::gameLoop(){
         else if(input.isKeyHeld(SDL_SCANCODE_RIGHT) == true){
             this->_player.moveRight();
         }
+
         if(input.isKeyHeld(SDL_SCANCODE_UP) == true){
+            this->_player.lookUp();
+        }
+        else if(input.isKeyHeld(SDL_SCANCODE_DOWN) == true){
+            this->_player.lookDown();
+        }
+
+        if(input.wasKeyReleased(SDL_SCANCODE_UP) == true){
+            this->_player.stopLookingUp();
+        }
+        if(input.wasKeyReleased(SDL_SCANCODE_DOWN) == true){
+            this->_player.stopLookingDown();
+        }
+        if(input.wasKeyPressed(SDL_SCANCODE_SPACE) == true){
             this->_player.jump();
         }
 
