@@ -4,10 +4,11 @@
 #include "game.h"
 #include "graphics.h"
 #include "input.h"
+#include "hud.h"
 
 namespace{
     const int FPS = 50;
-    const int MAX_FRAME_TIME = 5 * 1000 / FPS;
+    const int MAX_FRAME_TIME = 1000 / FPS;
 }
 
 Game::Game(){
@@ -24,8 +25,9 @@ void Game::gameLoop(){
     Input input;
     SDL_Event e;
 
-    this->_level = Level("Map 1", Vector2f(100, 100), graphics);
+    this->_level = Level("Map 1", graphics);
     this->_player = Player(graphics, this->_level.getPlayerSpawnPoint());
+    this->_hud = Hud(graphics, this->_player);
 
     int LAST_UPDATE_TIME = SDL_GetTicks64();
 
@@ -52,7 +54,21 @@ void Game::gameLoop(){
         else if(input.isKeyHeld(SDL_SCANCODE_RIGHT) == true){
             this->_player.moveRight();
         }
+
         if(input.isKeyHeld(SDL_SCANCODE_UP) == true){
+            this->_player.lookUp();
+        }
+        else if(input.isKeyHeld(SDL_SCANCODE_DOWN) == true){
+            this->_player.lookDown();
+        }
+
+        if(input.wasKeyReleased(SDL_SCANCODE_UP) == true){
+            this->_player.stopLookingUp();
+        }
+        if(input.wasKeyReleased(SDL_SCANCODE_DOWN) == true){
+            this->_player.stopLookingDown();
+        }
+        if(input.wasKeyPressed(SDL_SCANCODE_SPACE) || input.isKeyHeld(SDL_SCANCODE_SPACE)){
             this->_player.jump();
         }
 
@@ -62,6 +78,8 @@ void Game::gameLoop(){
 
         const int CURRENT_TIME_MS = SDL_GetTicks64();
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
+
+        this->_graphics = graphics;
         this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
         LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
@@ -74,6 +92,7 @@ void Game::draw(Graphics &p_graphics){
 
     this->_level.draw(p_graphics);
     this->_player.draw(p_graphics);
+    this->_hud.draw(p_graphics);
 
     p_graphics.flip();
 }
@@ -81,6 +100,7 @@ void Game::draw(Graphics &p_graphics){
 void Game::update(float p_elapsedTime){
     this->_player.update(p_elapsedTime);
     this->_level.update(p_elapsedTime);
+    this->_hud.update(p_elapsedTime);
 
     std::vector<Rectangle> others;
     if((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0){
@@ -91,5 +111,10 @@ void Game::update(float p_elapsedTime){
     std::vector<Slope> s_others;
     if((s_others = this->_level.checkSlopeCollisions(this->_player.getBoundingBox())).size() > 0){
         this->_player.handleSlopeCollisions(s_others);
+    }
+
+    std::vector<Door> d_others;
+    if((d_others = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0){
+        this->_player.handleDoorCollision(d_others, this->_level, this->_graphics);
     }
 }

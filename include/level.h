@@ -14,6 +14,7 @@
 #include "rectangle.h"
 #include "slope.h"
 #include "animatedTile.h"
+#include "door.h"
 
 class Graphics;
 struct SDL_Texture;
@@ -45,7 +46,7 @@ class Level{
          * @param p_spawnPoint Initial spawn point within the level.
          * @param p_graphics Graphics context for rendering the level.
          */
-        Level(std::string p_mapName, Vector2f p_spawnPoint, Graphics &p_graphics);
+        Level(std::string p_mapName, Graphics &p_graphics);
 
         /**
          * @brief Destructor. Cleans up resources used by the level.
@@ -70,6 +71,8 @@ class Level{
 
         std::vector<Slope> checkSlopeCollisions(const Rectangle &p_other);
 
+        std::vector<Door> checkDoorCollisions(const Rectangle &p_other);
+
         const Vector2f getPlayerSpawnPoint() const;
 
     private:
@@ -88,6 +91,8 @@ class Level{
 
         std::vector<AnimatedTile> _animatedTileList;
         std::vector<AnimatedTileInfo> _animatedTileInfo;
+
+        std::vector<Door> _doorList;
 
         Vector2f getTilesetPosition(Tileset p_tls, int p_gid, int p_tileWidth, int p_tileHeight);
         /**

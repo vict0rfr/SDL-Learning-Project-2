@@ -87,7 +87,15 @@ public:
      * @return const sides::Side: The side of the sprite where the collision with the other rectangle occurred.
      */
     const sides::Side getCollisionSide(Rectangle &p_other) const;
-protected:
+
+    void setSourceRectX(int p_value);
+    void setSourceRectY(int p_value);
+    void setSourceRectW(int p_value);
+    void setSourceRectH(int p_value);
+
+    inline float getX() const { return this->_x; }
+    inline float getY() const { return this->_y; }
+    protected:
     SDL_Rect _src; ///< Source rectangle in the sprite sheet.
     SDL_Texture* _spriteSheet; ///< Texture of the sprite sheet.
     float _x, _y; ///< Current position of the sprite.

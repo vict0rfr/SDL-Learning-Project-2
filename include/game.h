@@ -11,8 +11,8 @@
 
 #include "player.h"
 #include "level.h"
-
-class Graphics;
+#include "hud.h"
+#include "graphics.h"
 
 /**
  * @class Game
@@ -57,6 +57,9 @@ private:
 
     Player _player; ///< Represents the player character in the game.
     Level _level;
+    Hud _hud;
+
+    Graphics _graphics;
 };
 
 #endif // GAME_H

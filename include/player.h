@@ -13,10 +13,12 @@
 #include "animatedSprite.h"
 #include "globals.h"
 #include "slope.h"
+#include "level.h"
 
 #include <string>
 
 class Graphics;
+class Door;
 
 /**
  * @class Player
@@ -70,6 +72,11 @@ class Player : public AnimatedSprite {
          */
         void stopMoving();
 
+        void lookUp();
+        void stopLookingUp();
+        void lookDown();
+        void stopLookingDown();
+
         void jump();
 
         /**
@@ -86,14 +93,24 @@ class Player : public AnimatedSprite {
 
         void handleTileCollisions(std::vector<Rectangle> &p_others);
         void handleSlopeCollisions(std::vector<Slope> &p_others);
+        void handleDoorCollision(std::vector<Door> &p_others, Level &p_level, Graphics &p_graphics);
 
         float getX() const;
         float getY() const;
+
+        inline int getMaxHealth() const { return this->_maxHealth; }
+        inline int getCurrentHealth() const { return this->_currentHealth; }
 
     private:
         float _dx, _dy; ///< Delta x and y for player's movement.
         Direction _facing; ///< Current direction the player is facing.
         bool _grounded; ///< True/False depending on if the player is on the ground or not.
+
+        bool _lookingUp;
+        bool _lookingDown;
+
+        int _maxHealth;
+        int _currentHealth;
 };
 
 #endif /* PLAYER */
