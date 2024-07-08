@@ -90,6 +90,8 @@ public:
 
     void setSourceRectX(int p_value);
     void setSourceRectY(int p_value);
+    void setSourceRectW(int p_value);
+    void setSourceRectH(int p_value);
 
     inline float getX() const { return this->_x; }
     inline float getY() const { return this->_y; }
