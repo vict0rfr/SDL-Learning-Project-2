@@ -13,10 +13,12 @@
 #include "animatedSprite.h"
 #include "globals.h"
 #include "slope.h"
+#include "level.h"
 
 #include <string>
 
 class Graphics;
+class Door;
 
 /**
  * @class Player
@@ -91,6 +93,7 @@ class Player : public AnimatedSprite {
 
         void handleTileCollisions(std::vector<Rectangle> &p_others);
         void handleSlopeCollisions(std::vector<Slope> &p_others);
+        void handleDoorCollision(std::vector<Door> &p_others, Level &p_level, Graphics &p_graphics);
 
         float getX() const;
         float getY() const;

@@ -14,9 +14,8 @@ using namespace tinyxml2;
 
 Level::Level(){}
 
-Level::Level(std::string p_mapName, Vector2f p_spawnPoint, Graphics &p_graphics):
+Level::Level(std::string p_mapName, Graphics &p_graphics):
     _mapName(p_mapName),
-    _spawnPoint(p_spawnPoint),
     _size(Vector2f(0,0))
 {
     this->loadMap(p_mapName, p_graphics);
@@ -54,8 +53,18 @@ std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &p_other){
 std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &p_other){
     std::vector<Slope> others;
     for(int i = 0; i < this->_slopes.size(); i++){
-        if(this->_slopes.at(i).collidesWith(p_other)){
+        if(this->_slopes[i].collidesWith(p_other)){
             others.push_back(this->_slopes[i]);
+        }
+    }
+    return others;
+}
+
+std::vector<Door> Level::checkDoorCollisions(const Rectangle &p_other){
+    std::vector<Door> others;
+    for(int i = 0; i < this->_doorList.size(); i++){
+        if(this->_doorList[i].collidesWith(p_other)){
+            others.push_back(this->_doorList[i]);
         }
     }
     return others;
@@ -312,6 +321,42 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                         ss << name;
                         if(ss.str() == "player"){
                             this->_spawnPoint = Vector2f(std::ceil(x) * globals::SPRITE_SCALE, std::ceil(y) * globals::SPRITE_SCALE);
+                        }
+                        pObject = pObject->NextSiblingElement("object");
+                    }
+                }
+            } else if(ss.str() == "doors"){
+                XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+                if(pObject != NULL){
+                    while(pObject){
+                        float x = pObject->FloatAttribute("x");
+                        float y = pObject->FloatAttribute("y");
+                        float w = pObject->FloatAttribute("width");
+                        float h = pObject->FloatAttribute("height");
+
+                        Rectangle rect = Rectangle(x, y, w, h);
+
+                        XMLElement* pProperties = pObject->FirstChildElement("properties");
+                        if(pProperties != NULL){
+                            while(pProperties){
+                                XMLElement* pProperty = pProperties->FirstChildElement("property");
+                                if(pProperty != NULL){
+                                    while(pProperty){
+                                        const char* name = pProperty->Attribute("name");
+                                        std::stringstream ss;
+                                        ss << name;
+                                        if(ss.str() == "destination"){
+                                            const char* value = pProperty->Attribute("value");
+                                            std::stringstream ss2;
+                                            ss2 << value;
+                                            Door door = Door(rect, ss2.str());
+                                            this->_doorList.push_back(door);
+                                        }
+                                        pProperty = pProperty->NextSiblingElement("property");
+                                    }
+                                }
+                                pProperties = pProperties->NextSiblingElement("properties");
+                            }
                         }
                         pObject = pObject->NextSiblingElement("object");
                     }

@@ -177,6 +177,16 @@ void Player::handleSlopeCollisions(std::vector<Slope> &p_others){
     }
 }
 
+void Player::handleDoorCollision(std::vector<Door> &p_others, Level &p_level, Graphics &p_graphics){
+    for(int i = 0; i < p_others.size(); i++){
+        if(this->_grounded && this->_lookingDown){
+            p_level = Level(p_others.at(i).getDestination(), p_graphics);
+            this->_x = p_level.getPlayerSpawnPoint().x;
+            this->_y = p_level.getPlayerSpawnPoint().y;
+        }
+    }
+}
+
 float Player::getX() const{
     return this->_x;
 }
