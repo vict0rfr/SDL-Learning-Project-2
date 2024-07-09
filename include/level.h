@@ -17,6 +17,8 @@
 #include "door.h"
 
 class Graphics;
+class Enemy;
+class Player;
 struct SDL_Texture;
 struct SDL_Rect;
 struct Tileset;
@@ -58,7 +60,7 @@ class Level{
          * 
          * @param p_elapsedTime Time elapsed since the last update call.
          */
-        void update(int p_elapsedTime);
+        void update(int p_elapsedTime, Player &p_player);
 
         /**
          * @brief Draws the level to the screen.
@@ -93,6 +95,8 @@ class Level{
         std::vector<AnimatedTileInfo> _animatedTileInfo;
 
         std::vector<Door> _doorList;
+
+        std::vector<Enemy*> _enemies;
 
         Vector2f getTilesetPosition(Tileset p_tls, int p_gid, int p_tileWidth, int p_tileHeight);
         /**

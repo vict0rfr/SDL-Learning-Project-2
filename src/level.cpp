@@ -9,6 +9,8 @@
 #include "tinyxml2.h"
 #include "utils.h"
 #include "animatedTile.h"
+#include "player.h"
+#include "enemy.h"
 
 using namespace tinyxml2;
 
@@ -23,9 +25,13 @@ Level::Level(std::string p_mapName, Graphics &p_graphics):
 
 Level::~Level(){}
 
-void Level::update(int p_elapsedTime){
+void Level::update(int p_elapsedTime, Player &p_player){
     for(int i = 0; i < this->_animatedTileList.size(); i++){
         this->_animatedTileList[i].update(p_elapsedTime);
+    }
+
+    for(int i = 0; i < this->_enemies.size(); i++){
+        this->_enemies[i]->update(p_elapsedTime, p_player);
     }
 }
 
@@ -36,6 +42,10 @@ void Level::draw(Graphics &p_graphics){
 
     for(int i = 0; i < this->_animatedTileList.size(); i++){
         this->_animatedTileList[i].draw(p_graphics);
+    }
+
+    for(int i = 0; i < this->_enemies.size(); i++){
+        this->_enemies[i]->draw(p_graphics);
     }
 }
 
@@ -357,6 +367,24 @@ void Level::loadMap(std::string p_mapName, Graphics &p_graphics){
                                 }
                                 pProperties = pProperties->NextSiblingElement("properties");
                             }
+                        }
+                        pObject = pObject->NextSiblingElement("object");
+                    }
+                }
+            } else if(ss.str() == "enemies"){
+                float x, y;
+                XMLElement* pObject = pObjectGroup->FirstChildElement("object");
+                if(pObject != NULL){
+                    while(pObject){
+                        x = pObject->FloatAttribute("x");
+                        y = pObject->FloatAttribute("y");
+                        const char* name = pObject->Attribute("name");
+                        std::stringstream ss;
+                        ss << name;
+                        if(ss.str() == "bat"){
+                            this->_enemies.push_back(new Bat(p_graphics,
+                                Vector2f(std::floor(x) * globals::SPRITE_SCALE,
+                                std::floor(y) * globals::SPRITE_SCALE)));
                         }
                         pObject = pObject->NextSiblingElement("object");
                     }

@@ -99,7 +99,7 @@ void Game::draw(Graphics &p_graphics){
 
 void Game::update(float p_elapsedTime){
     this->_player.update(p_elapsedTime);
-    this->_level.update(p_elapsedTime);
+    this->_level.update(p_elapsedTime, this->_player);
     this->_hud.update(p_elapsedTime);
 
     std::vector<Rectangle> others;
