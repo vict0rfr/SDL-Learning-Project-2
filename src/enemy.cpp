@@ -8,15 +8,34 @@ Enemy::Enemy(Graphics &p_graphics, std::string p_filePath, int p_sourceX, int p_
             p_spawnPoint.x, p_spawnPoint.y, p_timeToUpdate),
             _direction(LEFT),
             _maxHealth(0),
-            _currentHealth(0)
+            _currentHealth(0),
+            _isInvicible(false),
+            _invincibilityDuration(2000), // 2000ms
+            _invincibilityTimer(0)
         {}
 
 void Enemy::update(int p_elapsedTime, Player &p_player){
+    // update invinc timer
+    if(this->_isInvicible){
+        this->_invincibilityTimer -= p_elapsedTime;
+        if(this->_invincibilityTimer <= 0){
+            this->_isInvicible = false;
+        }
+    }
+
     AnimatedSprite::update(p_elapsedTime);
 }
 
 void Enemy::draw(Graphics &p_graphics){
     AnimatedSprite::draw(p_graphics, this->_x, this->_y);
+}
+
+void Enemy::touchPlayer(Player* p_player){
+    if(!this->_isInvicible){
+            p_player->gainHealth(-1);
+            this->_isInvicible = true;
+            this->_invincibilityTimer = this->_invincibilityDuration; //sets the clock ticking 1sec
+    }
 }
 
 Bat::Bat(){}
@@ -25,10 +44,7 @@ Bat::Bat(Graphics &p_graphics, Vector2f p_spawnPoint):
     Enemy(p_graphics, "../res/gfx/NpcCemet.png", 32, 32, 16, 16, p_spawnPoint, 140),
         _startingX(p_spawnPoint.x),
         _startingY(p_spawnPoint.y),
-        _shouldMoveUp(false),
-        _isInvicible(false),
-        _invincibilityDuration(1000), // 1000ms
-        _invincibilityTimer(0)
+        _shouldMoveUp(false)
     {
         this->setupAnimations();
         this->playAnimation("FlyLeft");
@@ -44,14 +60,6 @@ void Bat::update(int p_elapsedTime, Player &p_player){
         this->_shouldMoveUp = !this->_shouldMoveUp;
     }
 
-    // update invinc timer
-    if(this->_isInvicible){
-        this->_invincibilityTimer -= p_elapsedTime;
-        if(this->_invincibilityTimer <= 0){
-            this->_isInvicible = false;
-        }
-    }
-
     Enemy::update(p_elapsedTime, p_player);
 }
 
@@ -60,11 +68,7 @@ void Bat::draw(Graphics &p_graphics){
 }
 
 void Bat::touchPlayer(Player* p_player){
-    if(!this->_isInvicible){
-        p_player->gainHealth(-1);
-        this->_isInvicible = true;
-        this->_invincibilityTimer = this->_invincibilityDuration; //sets the clock ticking 1sec
-    }
+    Enemy::touchPlayer(p_player);
 }
 
 void Bat::animationDone(std::string p_currentAnimation){

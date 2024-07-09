@@ -26,6 +26,9 @@ class Enemy : public AnimatedSprite {
 
         int _maxHealth;
         int _currentHealth;
+
+        bool _isInvicible;
+        float _invincibilityDuration, _invincibilityTimer;
 };
 
 class Bat : public Enemy{
@@ -42,9 +45,6 @@ class Bat : public Enemy{
 
         float _startingX, _startingY;
         bool _shouldMoveUp;
-
-        bool _isInvicible;
-        int _invincibilityDuration, _invincibilityTimer;
 };
 
 #endif /* ENEMY */
