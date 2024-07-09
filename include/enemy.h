@@ -17,6 +17,7 @@ class Enemy : public AnimatedSprite {
 
         virtual void update(int p_elapsedTime, Player &p_player);
         virtual void draw(Graphics &p_graphics);
+        virtual void touchPlayer(Player* p_player) = 0;
 
         inline int getMaxHealth() const { return this->_maxHealth; }
         inline int getCurrentHealth() const { return this->_currentHealth; }
@@ -33,6 +34,7 @@ class Bat : public Enemy{
         Bat(Graphics &p_graphics, Vector2f p_spawnPoint);
         void update(int p_elapsedTime, Player &p_player);
         void draw(Graphics &p_graphics);
+        void touchPlayer(Player* p_player);
 
         void animationDone(std::string p_currentAnimation);
         void setupAnimations();

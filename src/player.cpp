@@ -187,6 +187,16 @@ void Player::handleDoorCollision(std::vector<Door> &p_others, Level &p_level, Gr
     }
 }
 
+void Player::handleEnemyCollision(std::vector<Enemy*> &p_others){
+    for(int i = 0; i < p_others.size(); i++){
+        p_others[i]->touchPlayer(this);
+    }
+}
+
+void Player::gainHealth(int p_amount){
+    this->_currentHealth += p_amount;
+}
+
 float Player::getX() const{
     return this->_x;
 }

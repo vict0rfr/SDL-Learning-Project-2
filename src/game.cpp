@@ -100,7 +100,7 @@ void Game::draw(Graphics &p_graphics){
 void Game::update(float p_elapsedTime){
     this->_player.update(p_elapsedTime);
     this->_level.update(p_elapsedTime, this->_player);
-    this->_hud.update(p_elapsedTime);
+    this->_hud.update(p_elapsedTime, this->_player);
 
     std::vector<Rectangle> others;
     if((others = this->_level.checkTileCollisions(this->_player.getBoundingBox())).size() > 0){
@@ -116,5 +116,10 @@ void Game::update(float p_elapsedTime){
     std::vector<Door> d_others;
     if((d_others = this->_level.checkDoorCollisions(this->_player.getBoundingBox())).size() > 0){
         this->_player.handleDoorCollision(d_others, this->_level, this->_graphics);
+    }
+
+    std::vector<Enemy*> e_others;
+    if((e_others = this->_level.checkEnemyCollisions(this->_player.getBoundingBox())).size() > 0){
+        this->_player.handleEnemyCollision(e_others);
     }
 }

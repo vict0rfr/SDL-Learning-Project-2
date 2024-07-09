@@ -16,7 +16,8 @@ Hud::Hud(Graphics &p_graphics, Player &p_player){
     this->_dashes = Sprite(p_graphics, "../res/gfx/TextBox.png", 81, 51, 15, 11, 132, 26);
 }
 
-void Hud::update(int p_elapsedTime){
+void Hud::update(int p_elapsedTime, Player &p_player){
+    this->_player = p_player;
     this->_healthNumber1.setSourceRectX(8 * this->_player.getCurrentHealth());
 
     //calculate the width of the health bar

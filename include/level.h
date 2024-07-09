@@ -75,6 +75,8 @@ class Level{
 
         std::vector<Door> checkDoorCollisions(const Rectangle &p_other);
 
+        std::vector<Enemy*> checkEnemyCollisions(const Rectangle &p_other);
+
         const Vector2f getPlayerSpawnPoint() const;
 
     private:
