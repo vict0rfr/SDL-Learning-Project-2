@@ -36,11 +36,15 @@ class Bat : public Enemy{
         void draw(Graphics &p_graphics);
         void touchPlayer(Player* p_player);
 
+    private:
         void animationDone(std::string p_currentAnimation);
         void setupAnimations();
 
         float _startingX, _startingY;
         bool _shouldMoveUp;
+
+        bool _isInvicible;
+        int _invincibilityDuration, _invincibilityTimer;
 };
 
 #endif /* ENEMY */

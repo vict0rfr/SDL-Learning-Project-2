@@ -11,7 +11,7 @@ class Hud {
         Hud();
         Hud(Graphics &p_graphics, Player &p_player);
         void update(int p_elapsedTime, Player &p_player);
-        void draw (Graphics &p_graphics);
+        void draw(Graphics &p_graphics);
     private:
         Player _player;
 
