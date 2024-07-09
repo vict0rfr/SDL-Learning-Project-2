@@ -197,10 +197,15 @@ void Player::gainHealth(int p_amount){
     this->_currentHealth += p_amount;
 }
 
-float Player::getX() const{
-    return this->_x;
-}
+void Player::resetLevelOnDeath(Level &p_level, Graphics &p_graphics){
+    if(this->_currentHealth == 0){
+        p_level = Level("Map 1", p_graphics);
 
-float Player::getY() const{
-    return this->_y;
+        this->_x = p_level.getPlayerSpawnPoint().x;
+        this->_y = p_level.getPlayerSpawnPoint().y;
+
+        this->_currentHealth = this->_maxHealth;
+
+        
+    }
 }

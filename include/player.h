@@ -97,13 +97,15 @@ class Player : public AnimatedSprite {
         void handleDoorCollision(std::vector<Door> &p_others, Level &p_level, Graphics &p_graphics);
         void handleEnemyCollision(std::vector<Enemy*> &p_others);
 
-        float getX() const;
-        float getY() const;
+        inline float getX() const { return this->_x; };
+        inline float getY() const { return this->_y; };
 
         inline int getMaxHealth() const { return this->_maxHealth; }
         inline int getCurrentHealth() const { return this->_currentHealth; }
 
         void gainHealth(int p_amount);
+
+        void resetLevelOnDeath(Level &p_level, Graphics &p_graphics);
 
     private:
         float _dx, _dy; ///< Delta x and y for player's movement.

@@ -80,7 +80,7 @@ void Game::gameLoop(){
         int ELAPSED_TIME_MS = CURRENT_TIME_MS - LAST_UPDATE_TIME;
 
         this->_graphics = graphics;
-        this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME));
+        this->update(std::min(ELAPSED_TIME_MS, MAX_FRAME_TIME), graphics);
         LAST_UPDATE_TIME = CURRENT_TIME_MS;
 
         this->draw(graphics);
@@ -97,9 +97,9 @@ void Game::draw(Graphics &p_graphics){
     p_graphics.flip();
 }
 
-void Game::update(float p_elapsedTime){
+void Game::update(float p_elapsedTime, Graphics &p_graphics){
     this->_player.update(p_elapsedTime);
-    this->_level.update(p_elapsedTime, this->_player);
+    this->_level.update(p_elapsedTime, this->_player, p_graphics);
     this->_hud.update(p_elapsedTime, this->_player);
 
     std::vector<Rectangle> others;

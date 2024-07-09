@@ -45,7 +45,6 @@ class Level{
          * @brief Constructs a Level with a map name, spawn point, and graphics context.
          * 
          * @param p_mapName Name of the map file to load.
-         * @param p_spawnPoint Initial spawn point within the level.
          * @param p_graphics Graphics context for rendering the level.
          */
         Level(std::string p_mapName, Graphics &p_graphics);
@@ -60,7 +59,7 @@ class Level{
          * 
          * @param p_elapsedTime Time elapsed since the last update call.
          */
-        void update(int p_elapsedTime, Player &p_player);
+        void update(int p_elapsedTime, Player &p_player, Graphics &p_graphics);
 
         /**
          * @brief Draws the level to the screen.

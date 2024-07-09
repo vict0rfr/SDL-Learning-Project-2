@@ -25,7 +25,7 @@ Level::Level(std::string p_mapName, Graphics &p_graphics):
 
 Level::~Level(){}
 
-void Level::update(int p_elapsedTime, Player &p_player){
+void Level::update(int p_elapsedTime, Player &p_player, Graphics &p_graphics){
     for(int i = 0; i < this->_animatedTileList.size(); i++){
         this->_animatedTileList[i].update(p_elapsedTime);
     }
@@ -33,6 +33,8 @@ void Level::update(int p_elapsedTime, Player &p_player){
     for(int i = 0; i < this->_enemies.size(); i++){
         this->_enemies[i]->update(p_elapsedTime, p_player);
     }
+
+    p_player.resetLevelOnDeath(*this, p_graphics);
 }
 
 void Level::draw(Graphics &p_graphics){

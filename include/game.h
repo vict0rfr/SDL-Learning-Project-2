@@ -53,7 +53,7 @@ private:
      *
      * @param p_elapsedTime The time elapsed since the last update call.
      */
-    void update(float p_elapsedTime);
+    void update(float p_elapsedTime, Graphics &p_graphics);
 
     Player _player; ///< Represents the player character in the game.
     Level _level;
