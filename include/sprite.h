@@ -88,19 +88,65 @@ public:
      */
     const sides::Side getCollisionSide(Rectangle &p_other) const;
 
+    /**
+     * @brief Sets the x-coordinate of the source rectangle.
+     * 
+     * This method sets the x-coordinate of the source rectangle in the sprite sheet.
+     * 
+     * @param p_value The new x-coordinate value.
+     */
     void setSourceRectX(int p_value);
+
+    /**
+     * @brief Sets the y-coordinate of the source rectangle.
+     * 
+     * This method sets the y-coordinate of the source rectangle in the sprite sheet.
+     * 
+     * @param p_value The new y-coordinate value.
+     */
     void setSourceRectY(int p_value);
+
+    /**
+     * @brief Sets the width of the source rectangle.
+     * 
+     * This method sets the width of the source rectangle in the sprite sheet.
+     * 
+     * @param p_value The new width value.
+     */
     void setSourceRectW(int p_value);
+
+    /**
+     * @brief Sets the height of the source rectangle.
+     * 
+     * This method sets the height of the source rectangle in the sprite sheet.
+     * 
+     * @param p_value The new height value.
+     */
     void setSourceRectH(int p_value);
 
+    /**
+     * @brief Gets the x-coordinate of the sprite.
+     * 
+     * This method returns the current x-coordinate of the sprite.
+     * 
+     * @return float: The x-coordinate of the sprite.
+     */
     inline float getX() const { return this->_x; }
+
+    /**
+     * @brief Gets the y-coordinate of the sprite.
+     * 
+     * This method returns the current y-coordinate of the sprite.
+     * 
+     * @return float: The y-coordinate of the sprite.
+     */
     inline float getY() const { return this->_y; }
-    protected:
+
+protected:
     SDL_Rect _src; ///< Source rectangle in the sprite sheet.
     SDL_Texture* _spriteSheet; ///< Texture of the sprite sheet.
     float _x, _y; ///< Current position of the sprite.
-    Rectangle _boundingBox;
-private:
+    Rectangle _boundingBox; ///< Bounding box of the sprite.
 };
 
 #endif /* SPRITE */

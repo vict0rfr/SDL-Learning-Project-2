@@ -56,10 +56,9 @@ private:
     void update(float p_elapsedTime, Graphics &p_graphics);
 
     Player _player; ///< Represents the player character in the game.
-    Level _level;
-    Hud _hud;
-
-    Graphics _graphics;
+    Level _level; ///< Represents the current level in the game.
+    Hud _hud; ///< Represents the heads-up display (HUD) in the game.
+    Graphics _graphics; ///< Graphics object used for rendering.
 };
 
 #endif // GAME_H
