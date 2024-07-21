@@ -15,6 +15,7 @@
 #include "slope.h"
 #include "animatedTile.h"
 #include "door.h"
+#include "object.h"
 
 class Graphics;
 class Enemy;
@@ -77,6 +78,14 @@ public:
     std::vector<Rectangle> checkTileCollisions(const Rectangle &p_other);
 
     /**
+     * @brief Checks for collisions with objects.
+     * 
+     * @param p_other The rectangle to check for collisions.
+     * @return std::vector<Object> A vector of objects representing the colliding objects.
+     */
+    std::vector<Object> checkObjectCollisions(const Rectangle &p_other);
+
+    /**
      * @brief Checks for collisions with slopes.
      * 
      * @param p_other The rectangle to check for collisions.
@@ -125,6 +134,7 @@ private:
     std::vector<AnimatedTileInfo> _animatedTileInfo; ///< Information about animated tiles.
     std::vector<Door> _doorList; ///< List of doors in the level.
     std::vector<Enemy*> _enemies; ///< List of enemies in the level.
+    std::vector<Object> _objects; /// < List of various objects in the level.
 
     /**
      * @brief Gets the position of a tile in the tileset.

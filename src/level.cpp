@@ -61,6 +61,17 @@ std::vector<Rectangle> Level::checkTileCollisions(const Rectangle &p_other){
     return others;
 }
 
+std::vector<Object> Level::checkObjectCollisions(const Rectangle &p_other){
+    std::vector<Object> others;
+    for(int i = 0; i < this->_objects.size(); i++){
+        if(this->_objects[i].collidesWith(p_other)){
+            this->_objects[i]._isActive = true;
+            others.push_back(this->_objects[i]);
+        }
+    }
+    return others;
+}
+
 
 std::vector<Slope> Level::checkSlopeCollisions(const Rectangle &p_other){
     std::vector<Slope> others;

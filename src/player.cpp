@@ -1,5 +1,6 @@
 #include "player.h"
 #include "graphics.h"
+#include "object.h"
 
 #include <iostream>
 
@@ -163,6 +164,14 @@ void Player::handleTileCollisions(std::vector<Rectangle> &p_others){
     }
 }
 
+
+void Player::handleObjectCollisions(std::vector<Object> &p_others){
+    for(int i = 0; i < p_others.size(); i++){
+        if(p_others[i].getActive()){
+            this->gainHealth(1);
+        }
+    }
+}
 void Player::handleSlopeCollisions(std::vector<Slope> &p_others){
     for(int i = 0; i < p_others.size(); i++){
         int b = (p_others.at(i).getP1().y - (p_others.at(i).getSlope() * p_others.at(i).getP1().x));

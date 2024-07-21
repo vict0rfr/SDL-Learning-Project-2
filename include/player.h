@@ -15,6 +15,7 @@
 #include "slope.h"
 #include "level.h"
 #include "enemy.h"
+#include "object.h"
 
 #include <string>
 
@@ -116,6 +117,13 @@ public:
      * @param p_others A vector of rectangles representing the tiles.
      */
     void handleTileCollisions(std::vector<Rectangle> &p_others);
+
+    /**
+     * @brief Handles collisions with object.
+     * 
+     * @param p_others A vector of rectangles representing the objects.
+     */
+    void handleObjectCollisions(std::vector<Object> &p_others);
 
     /**
      * @brief Handles collisions with slopes.
